@@ -4,10 +4,10 @@ const { prisma } = require('./generated/prisma-client');
 const resolvers = {
   Query: {
     info: () => `This is an API of Hackernews Clone`,
-    feed: () => (root, args, context, info) => {
+    feed: (root, args, context, info) => {
       return context.prisma.links();
     },
-    link: (parent, args) => links.find(link => link.id === args.id)
+    link: (root, args) => links.find(link => link.id === args.id)
   },
 
   Mutation: {
@@ -18,7 +18,7 @@ const resolvers = {
       })
     },
 
-    updateLink: (parent, args) => {
+    updateLink: (root, args) => {
       const link = {
         id: args.id,
         description: args.description,
@@ -32,7 +32,7 @@ const resolvers = {
       return link;
     },
 
-    deleteLink: (parent, args) => {
+    deleteLink: (root, args) => {
       let linkRef = links.find(link => link.id === args.id);
       links.map(link => {
         if (link.id === args.id) {
