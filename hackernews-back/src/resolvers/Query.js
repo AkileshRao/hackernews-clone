@@ -7,9 +7,20 @@ feed = async (root, args, context, info) => {
   } : {}
 
   const links = await context.prisma.links({
+    where,
+    skip: args.skip,
+    first: args.first,
+    orderBy: args.orderBy
+  });
+
+  const count = await context.prisma.linksConnection({
     where
-  })
-  return links;
+  }).aggregate().count();
+
+  return {
+    links,
+    count
+  };
 }
 
 module.exports = {
